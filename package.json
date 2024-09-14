@@ -3,22 +3,28 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "concurrently -n Proxy,Server -c yellow,white \"local-ssl-proxy --source 8080 --target 8081\" \"next dev -p 8081\"",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@henriqueinonhe/type-utils": "3.0.0",
+    "@tanstack/react-query": "5.55.4",
+    "envalid": "8.0.0",
     "next": "14.2.10",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "return-exception": "1.1.0"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "concurrently": "9.0.1",
     "eslint": "^8",
     "eslint-config-next": "14.2.10",
+    "local-ssl-proxy": "2.0.5",
     "prettier": "3.3.3",
     "sass": "1.78.0",
     "typescript": "^5"
