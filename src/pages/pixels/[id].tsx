@@ -11,14 +11,21 @@ const PixelPage = () => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const pixelId = context.params?.id;
 
+  console.log({ pixelId });
+
   if (!pixelId || typeof pixelId !== "string") {
     return {
       notFound: true,
     };
   }
+
+  console.log(context.req.cookies);
+
   const token = context.req.cookies["auth"] ?? "";
 
   const pixel = await getPixelById(pixelId, token);
+
+  console.log({ pixel });
 
   if (typeof pixel === "string") {
     return {
