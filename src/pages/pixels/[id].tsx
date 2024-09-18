@@ -4,32 +4,41 @@ import { SerializedPixelMapper } from "@/infrastructure/pixel/SerializedPixelMap
 import { pageWithAuthRequired } from "@/view/user/pageWithAuthRequired";
 import { GetServerSideProps } from "next";
 
-const PixelPage = () => {
-  return <></>;
+type Debug = {
+  debug: string;
+};
+
+const PixelPage = ({ debug }: Debug) => {
+  return <>{debug}</>;
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const pixelId = context.params?.id;
 
-  console.log({ pixelId });
-
   if (!pixelId || typeof pixelId !== "string") {
+    //  return {
+    //    notFound: true,
+    //  };
     return {
-      notFound: true,
+      props: {
+        debug: "No pixel id",
+      },
     };
   }
-
-  console.log(context.req.cookies);
 
   const token = context.req.cookies["auth"] ?? "";
 
   const pixel = await getPixelById(pixelId, token);
 
-  console.log({ pixel });
-
   if (typeof pixel === "string") {
+    // return {
+    //   notFound: true,
+    // };
+
     return {
-      notFound: true,
+      props: {
+        debug: "No Pixel",
+      },
     };
   }
 
@@ -43,7 +52,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   res.end();
 
   return {
-    props: {},
+    props: { debug: "Ok!" },
   };
 };
 
