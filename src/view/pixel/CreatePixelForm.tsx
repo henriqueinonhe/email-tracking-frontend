@@ -1,6 +1,9 @@
 import { useState, useId } from "react";
+import { useTrackers } from "./useTrackers";
 
 export const CreatePixelForm = () => {
+  const { createTracker, createTrackerStatus } = useTrackers();
+
   const [recipient, setRecipient] = useState("");
   const [identifier, setIdentifier] = useState("");
 
@@ -11,7 +14,9 @@ export const CreatePixelForm = () => {
   const trimmedIdentifier = identifier.trim();
 
   const createPixelButtonIsDisabled =
-    trimmedRecipient.length === 0 || trimmedIdentifier.length === 0;
+    trimmedRecipient.length === 0 ||
+    trimmedIdentifier.length === 0 ||
+    createTrackerStatus === "pending";
 
   return (
     <div>
@@ -40,7 +45,12 @@ export const CreatePixelForm = () => {
         />
       </div>
 
-      <button disabled={createPixelButtonIsDisabled}>Criar</button>
+      <button
+        onClick={() => createTracker({ recipient, identifier })}
+        disabled={createPixelButtonIsDisabled}
+      >
+        {createTrackerStatus === "pending" ? "Criando..." : "Criar"}
+      </button>
     </div>
   );
 };

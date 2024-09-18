@@ -1,8 +1,8 @@
 import { Pixel } from "@/domain/pixel/Pixel";
-import { Tracker } from "@/domain/Tracker";
+import { ApiTracker } from "../trackers/ApiTracker";
 
 export const ApiPixelMapper = {
-  fromApi: (tracker: Tracker): Pixel => {
+  fromApi: (tracker: ApiTracker): Pixel => {
     return {
       id: tracker.id,
       identifier: tracker.identifier,

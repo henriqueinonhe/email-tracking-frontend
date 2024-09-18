@@ -1,4 +1,5 @@
-import { apiHttpClient } from "../infrastructure/apiHttpClient";
+import { ApiTrackerMapper } from "@/infrastructure/trackers/ApiTrackerMapper";
+import { createTracker as apiCreateTracker } from "@/infrastructure/trackers/createTracker";
 
 export type CreateTrackerParameters = {
   identifier: string;
@@ -9,17 +10,10 @@ export const createTracker = async ({
   identifier,
   recipient,
 }: CreateTrackerParameters) => {
-  const response = await apiHttpClient.request("/trackers", {
-    method: "POST",
-    body: {
-      identifier,
-      recipient,
-    },
+  const result = await apiCreateTracker({
+    identifier,
+    recipient,
   });
 
-  if (response.status !== 201) {
-    throw new Error("Error creating tracker!");
-  }
-
-  return response.data;
+  return ApiTrackerMapper.fromApi(result);
 };

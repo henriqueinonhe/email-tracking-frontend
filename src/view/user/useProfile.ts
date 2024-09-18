@@ -20,7 +20,6 @@ export const useProfile = () => {
     queryKey: ["Profile"],
     queryFn: adaptedGetProfile,
     retry: (_, error) => {
-      console.log(error);
       return error.message !== "NotAuthenticated";
     },
   });
