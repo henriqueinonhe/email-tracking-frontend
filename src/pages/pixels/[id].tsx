@@ -37,7 +37,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     return {
       props: {
-        debug: "No Pixel",
+        debug: `No Pixel |  ${pixelId} | ${pixel}`,
       },
     };
   }
