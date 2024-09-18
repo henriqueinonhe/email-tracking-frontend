@@ -16,9 +16,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       notFound: true,
     };
   }
-
-  console.log(context.req.cookies);
-
   const token = context.req.cookies["auth"] ?? "";
 
   const pixel = await getPixelById(pixelId, token);
