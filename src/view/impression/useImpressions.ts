@@ -15,6 +15,7 @@ export const useImpressions = (trackerId: string) => {
     },
     retry: (_, error) => error.message !== "NotAuthenticated",
     staleTime: 40000,
+    refetchInterval: 40000,
   });
 
   return {
