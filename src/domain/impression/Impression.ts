@@ -9,4 +9,5 @@ export type Impression = {
     city: string | null;
   };
   date: Date;
+  trackerId: string;
 };

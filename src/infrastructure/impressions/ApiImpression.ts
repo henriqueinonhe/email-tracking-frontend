@@ -9,4 +9,5 @@ export type ApiImpression = {
     city: string | null;
   };
   date: string;
+  trackerId: string;
 };
