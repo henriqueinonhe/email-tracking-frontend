@@ -11,10 +11,13 @@
   "dependencies": {
     "@henriqueinonhe/type-utils": "3.0.0",
     "@tanstack/react-query": "5.55.4",
+    "antd": "5.21.3",
     "envalid": "8.0.0",
+    "named-components": "^0.2.2",
     "next": "14.2.10",
     "react": "^18",
     "react-dom": "^18",
+    "reasonable-error": "0.0.0-beta",
     "return-exception": "1.1.0"
   },
   "devDependencies": {
