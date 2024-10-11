@@ -4,68 +4,75 @@ import { Tracker } from "@/domain/tracker/Tracker";
 import { ImpressionsList } from "../impression/ImpressionsList";
 import { Urls } from "../Urls";
 import Link from "next/link";
+import { Button, Table } from "antd";
+import styles from "./PixelsList.module.scss";
+import { makeDiv, makeH2 } from "named-components";
 
 export const PixelsList = () => {
   const { trackers, trackersStatus } = useTrackers();
 
   const [selectedTracker, setSelectedTracker] = useState<Tracker>();
 
-  if (trackersStatus === "pending") {
-    return "Carregando pixels...";
-  }
-
   if (trackersStatus === "error") {
     return "Não conseguimos carregar os pixels, por favor tente novamente";
   }
 
+  const tableColumns = [
+    {
+      title: "Email",
+      dataIndex: "recipient",
+    },
+    {
+      title: "Identificador",
+      dataIndex: "identifier",
+    },
+    {
+      title: "Data de Criação",
+      render: (tracker: Tracker) => tracker.createdAt.toLocaleString(),
+    },
+    {
+      title: "Pixel",
+      render: (tracker: Tracker) => (
+        <Link href={Urls.pixel(tracker)} target="_blank">
+          <Button>Abrir</Button>
+        </Link>
+      ),
+    },
+  ];
+
   return (
     <>
-      <h2>Pixels</h2>
+      <Title>Pixels</Title>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Id</th>
-            <th>Email</th>
-            <th>Identificador</th>
-            <th>Data de Criação</th>
-            <th>Pixel</th>
-          </tr>
-        </thead>
-        <tbody>
-          {trackers!.map((tracker) => (
-            <tr
-              style={{ cursor: "pointer" }}
-              key={tracker.id}
-              onClick={() => setSelectedTracker(tracker)}
-            >
-              <td>
-                <span style={{ marginLeft: 12 }}>{tracker.id}</span>
-              </td>
-              <td>
-                <span style={{ marginLeft: 12 }}>{tracker.recipient}</span>
-              </td>
-              <td>
-                <span style={{ marginLeft: 12 }}>{tracker.identifier}</span>
-              </td>
-              <td>
-                <span style={{ marginLeft: 12 }}>
-                  {tracker.createdAt.toLocaleString()}
-                </span>
-              </td>
-              <td>
-                <span style={{ marginLeft: 12 }}>
-                  <Link href={Urls.pixel(tracker)} target="_blank">
-                    <button>Abrir</button>
-                  </Link>
-                </span>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <TableContainer>
+        <Table
+          bordered
+          loading={trackersStatus === "pending"}
+          pagination={false}
+          dataSource={trackers}
+          columns={tableColumns}
+          scroll={{
+            y: "30vh",
+          }}
+          onRow={(tracker) => ({
+            onClick: () => setSelectedTracker(tracker),
+          })}
+          rowClassName={styles.row}
+          rowKey={(tracker) => tracker.id}
+          rowSelection={{
+            selectedRowKeys: selectedTracker ? [selectedTracker.id] : [],
+            // Workaround to hide checkboxes
+            columnWidth: 0,
+            renderCell: () => null,
+          }}
+        />
+      </TableContainer>
 
       {selectedTracker && <ImpressionsList tracker={selectedTracker} />}
     </>
   );
 };
+
+const Title = makeH2(styles.title);
+
+const TableContainer = makeDiv(styles.tableContainer);
