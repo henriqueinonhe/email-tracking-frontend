@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently -n Proxy,Server -c yellow,white \"local-ssl-proxy --source 8080 --target 8081\" \"next dev -p 8081\"",
+    "dev": "concurrently -n Proxy,Server -c yellow,white \"local-ssl-proxy --source 8080 --target 8081\" \"NODE_TLS_REJECT_UNAUTHORIZED=0 next dev -p 8081\"",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

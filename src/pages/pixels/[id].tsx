@@ -47,7 +47,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const res = context.res;
   res.setHeader("Content-Type", "text/html");
   res.write(
-    `<img src="${env.NEXT_PUBLIC_API_BASE_URL}/pixels/${serializedPixel.id}"></img>`,
+    `<img src="${env.NEXT_PUBLIC_API_BASE_URL}/pixels/${serializedPixel.id}?forCopying=true"></img>`,
   );
   res.end();
 
