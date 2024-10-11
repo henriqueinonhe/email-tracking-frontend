@@ -4,7 +4,7 @@ import { Tracker } from "@/domain/tracker/Tracker";
 import { ImpressionsList } from "../impression/ImpressionsList";
 import { Urls } from "../Urls";
 import Link from "next/link";
-import { Button, Table } from "antd";
+import { Button, Table, TableColumnsType } from "antd";
 import styles from "./PixelsList.module.scss";
 import { makeDiv, makeH2 } from "named-components";
 
@@ -17,7 +17,7 @@ export const PixelsList = () => {
     return "Não conseguimos carregar os pixels, por favor tente novamente";
   }
 
-  const tableColumns = [
+  const tableColumnsSpecification: TableColumnsType<Tracker> = [
     {
       title: "Email",
       dataIndex: "recipient",
@@ -50,7 +50,7 @@ export const PixelsList = () => {
           loading={trackersStatus === "pending"}
           pagination={false}
           dataSource={trackers}
-          columns={tableColumns}
+          columns={tableColumnsSpecification}
           scroll={{
             y: "30vh",
           }}
@@ -65,6 +65,8 @@ export const PixelsList = () => {
             columnWidth: 0,
             renderCell: () => null,
           }}
+          // We need this to render the footer
+          footer={() => null}
         />
       </TableContainer>
 
