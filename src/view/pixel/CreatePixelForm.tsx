@@ -1,7 +1,15 @@
 import { useState, useId } from "react";
 import { useTrackers } from "./useTrackers";
+import { makeDerived, makeDiv } from "named-components";
+import { Button, Input } from "antd";
+import styles from "./CreatePixelForm.module.scss";
+import { Tracker } from "@/domain/tracker/Tracker";
 
-export const CreatePixelForm = () => {
+export type CreatePixelFormProps = {
+  onTrackerCreated: (tracker: Tracker) => void;
+};
+
+export const CreatePixelForm = ({ onTrackerCreated }: CreatePixelFormProps) => {
   const { createTracker, createTrackerStatus } = useTrackers();
 
   const [recipient, setRecipient] = useState("");
@@ -19,12 +27,14 @@ export const CreatePixelForm = () => {
   };
 
   const onCreateTrackerClicked = async () => {
-    await createTracker({
+    const tracker = await createTracker({
       identifier: trimmedIdentifier,
       recipient: trimmedRecipient,
     });
 
     resetForm();
+
+    onTrackerCreated(tracker);
   };
 
   const createPixelButtonIsDisabled =
@@ -34,21 +44,24 @@ export const CreatePixelForm = () => {
 
   return (
     <div>
-      <h2>Criar pixel</h2>
-      <div>
+      <h2>Criar Pixel</h2>
+
+      <InputContainer>
         <label htmlFor={emailId}>{"Email (Destinatário)"}</label>
-        <input
+
+        <RecipientInput
           id={emailId}
           name="recipient"
           type="text"
           value={recipient}
           onChange={(event) => setRecipient(event.target.value)}
         />
-      </div>
+      </InputContainer>
 
-      <div>
+      <InputContainer>
         <label htmlFor={identifierId}>Identificador</label>
-        <input
+
+        <IdentifierInput
           id={identifierId}
           // Hack to not trigger 1password autocomplete
           name="search_identifier"
@@ -57,14 +70,28 @@ export const CreatePixelForm = () => {
           onChange={(event) => setIdentifier(event.target.value)}
           autoComplete="off"
         />
-      </div>
+      </InputContainer>
 
-      <button
-        onClick={onCreateTrackerClicked}
-        disabled={createPixelButtonIsDisabled}
-      >
-        {createTrackerStatus === "pending" ? "Criando..." : "Criar"}
-      </button>
+      <CreatePixelButtonContainer>
+        <CreatePixelButton
+          type="primary"
+          size="large"
+          onClick={onCreateTrackerClicked}
+          disabled={createPixelButtonIsDisabled}
+        >
+          {createTrackerStatus === "pending" ? "Criando..." : "Criar"}
+        </CreatePixelButton>
+      </CreatePixelButtonContainer>
     </div>
   );
 };
+
+const InputContainer = makeDiv(styles.inputContainer);
+
+const RecipientInput = makeDerived(Input);
+
+const IdentifierInput = makeDerived(Input);
+
+const CreatePixelButtonContainer = makeDiv(styles.createPixelButtonContainer);
+
+const CreatePixelButton = makeDerived(Button);

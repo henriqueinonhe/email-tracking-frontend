@@ -6,12 +6,15 @@ import { Urls } from "../Urls";
 import Link from "next/link";
 import { Button, Table, TableColumnsType } from "antd";
 import styles from "./PixelsList.module.scss";
-import { makeDiv, makeH2 } from "named-components";
+import { makeDerived, makeDiv, makeH2 } from "named-components";
+import { CreatePixelModal } from "./CreatePixelModal";
 
 export const PixelsList = () => {
   const { trackers, trackersStatus } = useTrackers();
 
   const [selectedTracker, setSelectedTracker] = useState<Tracker>();
+
+  const [createPixelModalIsOpen, setCreatePixelModalIsOpen] = useState(false);
 
   if (trackersStatus === "error") {
     return "Não conseguimos carregar os pixels, por favor tente novamente";
@@ -40,16 +43,34 @@ export const PixelsList = () => {
     },
   ];
 
+  const sortedTrackers = trackers?.toSorted(
+    (first, second) => second.createdAt.getTime() - first.createdAt.getTime(),
+  );
+
   return (
     <>
       <Title>Pixels</Title>
+
+      <CreatePixelButtonContainer>
+        <CreatePixelButton
+          type="primary"
+          size="large"
+          onClick={() => setCreatePixelModalIsOpen(true)}
+        >
+          Criar Pixel
+        </CreatePixelButton>
+      </CreatePixelButtonContainer>
+
+      {createPixelModalIsOpen && (
+        <CreatePixelModal onClose={() => setCreatePixelModalIsOpen(false)} />
+      )}
 
       <TableContainer>
         <Table
           bordered
           loading={trackersStatus === "pending"}
           pagination={false}
-          dataSource={trackers}
+          dataSource={sortedTrackers}
           columns={tableColumnsSpecification}
           scroll={{
             y: "30vh",
@@ -78,3 +99,7 @@ export const PixelsList = () => {
 const Title = makeH2(styles.title);
 
 const TableContainer = makeDiv(styles.tableContainer);
+
+const CreatePixelButtonContainer = makeDiv(styles.createPixelButtonContainer);
+
+const CreatePixelButton = makeDerived(Button);
