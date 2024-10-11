@@ -13,6 +13,20 @@ export const CreatePixelForm = () => {
   const trimmedRecipient = recipient.trim();
   const trimmedIdentifier = identifier.trim();
 
+  const resetForm = () => {
+    setRecipient("");
+    setIdentifier("");
+  };
+
+  const onCreateTrackerClicked = async () => {
+    await createTracker({
+      identifier: trimmedIdentifier,
+      recipient: trimmedRecipient,
+    });
+
+    resetForm();
+  };
+
   const createPixelButtonIsDisabled =
     trimmedRecipient.length === 0 ||
     trimmedIdentifier.length === 0 ||
@@ -46,7 +60,7 @@ export const CreatePixelForm = () => {
       </div>
 
       <button
-        onClick={() => createTracker({ recipient, identifier })}
+        onClick={onCreateTrackerClicked}
         disabled={createPixelButtonIsDisabled}
       >
         {createTrackerStatus === "pending" ? "Criando..." : "Criar"}
