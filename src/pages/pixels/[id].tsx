@@ -28,14 +28,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const token = context.req.cookies["auth"] ?? "";
 
-  console.log(context.req.cookies);
-
   const pixel = await getPixelById(pixelId, token);
 
   if (typeof pixel === "string") {
     // return {
     //   notFound: true,
     // };
+
+    console.log(context.req.cookies);
 
     return {
       props: {
